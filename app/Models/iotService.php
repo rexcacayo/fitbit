@@ -67,5 +67,12 @@ class iotService extends Model
 
     ];
 
+    public function atributtes()
+    {
+        return $this->hasMany('App\atribute', 'entity_id', 'id');
+    }
+
+
+
 
 }

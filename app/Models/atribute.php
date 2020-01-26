@@ -20,7 +20,7 @@ class atribute extends Model
     use SoftDeletes;
 
     public $table = 'atributes';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -51,16 +51,13 @@ class atribute extends Model
      * @var array
      */
     public static $rules = [
-        
+
     ];
 
-    public function entityAttr()
-
+    public function iotservice()
     {
-
-        return $this->belongsTo('App\Models\entity');
-
+        return $this->belongsTo('App\iotService', 'entity_id', 'id');
     }
 
-    
+
 }

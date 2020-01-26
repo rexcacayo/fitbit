@@ -6,6 +6,7 @@ use App\Http\Requests\CreateiotServiceRequest;
 use App\Http\Requests\UpdateiotServiceRequest;
 use App\Repositories\iotServiceRepository;
 use App\Models\iotService;
+use App\Models\atribute;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -62,6 +63,7 @@ class iotServiceController extends AppBaseController
     {
 
         $input = $request->all();
+
         $ip = config('fiware.fiware_servidor_ip');
         $service = config('fiware.fiware_service');
         $path = '/';
@@ -72,10 +74,14 @@ class iotServiceController extends AppBaseController
         $portOrion = config('fiware.fiware_orion_port');
         $url = "http://$ip:$portIOT/iot/services";
         $urlC = "http://$ip:$portOrion";
-        $campos[] = $input['attrName'];
+        $campos= $input['attrName'];
+        $camposTipo = $input['attrType'];
+        $camposObjective = $input['attrObject'];
+        $camposTamano = count($campos);
+
         $cadena = "CREATE TABLE $entity(";
         $cadena.="id SERIAL PRIMARY KEY";
-        foreach ($campos[0] as $value){
+        foreach ($campos as $value){
             $cadena .= ','.$value.' varchar(191) NULL';
         };
         $cadena .=",tipoDato varchar(191) NULL";
@@ -124,8 +130,8 @@ class iotServiceController extends AppBaseController
             curl_close ($ch);
             $answer = json_decode($server_output);
             if(!empty($answer->name)){
-                $cadenaError = "'DROP TABLE'.$entity.'";
-                $results=DB::statement($cadenaError);
+               // $cadenaError = "DROP TABLE. $entity.";
+              //  $results=DB::statement($cadenaError);
                 Flash::success('Datos a corto plazo: ' . $answer->name . ', Mensaje ' . $answer->message);
                 \Log::error('Datos a corto plazo: ' . $answer->name . ', Mensaje ' . $answer->message);
                 return redirect(route('iotServices.index'));
@@ -139,15 +145,26 @@ class iotServiceController extends AppBaseController
                 $iotGroup->entity_type = $entity;
                 $iotGroup->resource = $resource;
                 $iotGroup->save();
+                for($i=0;$i<$camposTamano; $i++){
+
+                    $atributo = new atribute;
+                    $atributo->name = $campos[$i];
+                    $atributo->type = $camposTipo[$i];
+                    $atributo->value = $camposObjective[$i];
+                    $atributo->entity_id = $iotGroup->id;
+
+                    $atributo->save();
+                }
+            }
                 Flash::success('Grupo IOT creado');
                 return redirect(route('iotServices.index'));
-            }
         }
-            catch(\Exception $e){
-                $cadenaError = "'DROP TABLE'.$entity.'";
-                $results=DB::statement($cadenaError);
-                Log::critical('SERVICIO: ' . $e->getCode() . ', ' . $e->getLine() . ', ' . $e->getMessage());
-                \Log::error('SERVICIO: ' . $e->getCode() . ', ' . $e->getLine() . ', ' . $e->getMessage());
+
+        catch(\Exception $e){
+            //$cadenaError = "'DROP TABLE'.$entity.'";
+            //$results=DB::statement($cadenaError);
+            Log::critical('SERVICIO: ' . $e->getCode() . ', ' . $e->getLine() . ', ' . $e->getMessage());
+            \Log::error('SERVICIO: ' . $e->getCode() . ', ' . $e->getLine() . ', ' . $e->getMessage());
                 Flash::success('SERVICIO: ' . $e->getCode() . ', ' . $e->getLine() . ', ' . $e->getMessage());
                 return redirect(route('iotServices.index'));
             }
