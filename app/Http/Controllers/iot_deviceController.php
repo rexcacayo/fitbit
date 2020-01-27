@@ -14,6 +14,7 @@ use Log;
 use App\Models\iotService;
 use App\Models\iot_device;
 use App\Models\fitbit;
+use Illuminate\Support\Facades\DB;
 
 class iot_deviceController extends AppBaseController
 {
@@ -93,7 +94,8 @@ class iot_deviceController extends AppBaseController
             foreach($attr as $clave => $valor){
                 $data['devices'][0]['attributes'][$i]['object_id'] =$valor['objective'];
                 $data['devices'][0]['attributes'][$i]['name'] =$valor['name'];
-                $data['devices'][0]['attributes'][$i]['type'] = $valor['type'];  
+                $data['devices'][0]['attributes'][$i]['type'] = $valor['type']; 
+                $field = $valor['name'];
                 $i++;
             }
 
@@ -114,7 +116,22 @@ class iot_deviceController extends AppBaseController
             $data['devices'][0]['static_attributes'][4]['value'] = config('fiware.fiware_dock');
 
             $data_json = json_encode($data);
+            /***********AGREGAR CAMPOS DE ATIBUTOS  ATABLA********/
+            $arrayAttrEst = $data['devices'][0]['static_attributes'];
+            foreach($arrayAttrEst as $campo => $valor){
+                $field = $valor['name'];
+                $cadenaSql = "ALTER TABLE $entityType ADD $field varchar(191) NULL";
+                DB::statement($cadenaSql); 
+            }
             
+            
+
+
+
+
+
+
+            /***************************************************** */
             /************fin */
             $headers = [
                 "Content-Type:application/json",
