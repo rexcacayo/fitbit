@@ -436,12 +436,11 @@ class fitbitAPIController extends AppBaseController
     }
 
     public function signOcb(Request $request){
-        $ans['request']=$request;
-        $ans['headers']= $request->header();
-        \Log::info($ans);
-        return $this->sendResponse(200,$ans);
-
-
-    }
+	    $data=$request->toArray();
+        //$ans['headers']= $request->header();
+        \Log::info($data['contextResponses'][0]['contextElement']);
+        return $this->sendResponse(200,$data);
+	}
+	
 
 }

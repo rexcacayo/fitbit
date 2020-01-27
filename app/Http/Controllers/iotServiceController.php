@@ -6,7 +6,7 @@ use App\Http\Requests\CreateiotServiceRequest;
 use App\Http\Requests\UpdateiotServiceRequest;
 use App\Repositories\iotServiceRepository;
 use App\Models\iotService;
-use App\Models\atribute;
+use App\Models\iot_device_attribute;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -67,7 +67,7 @@ class iotServiceController extends AppBaseController
         $ip = config('fiware.fiware_servidor_ip');
         $service = config('fiware.fiware_service');
         $path = '/';
-        $entity = $input['entity_type'];
+        $entity = ucfirst($input['entity_type']);
         $apikey = $input['apikey'];
         $resource = $input['resource'];
         $portIOT = config('fiware.fiware_iot_port');
@@ -147,11 +147,11 @@ class iotServiceController extends AppBaseController
                 $iotGroup->save();
                 for($i=0;$i<$camposTamano; $i++){
 
-                    $atributo = new atribute;
+                    $atributo = new iot_device_attribute;
                     $atributo->name = $campos[$i];
                     $atributo->type = $camposTipo[$i];
-                    $atributo->value = $camposObjective[$i];
-                    $atributo->entity_id = $iotGroup->id;
+                    $atributo->objective = $camposObjective[$i];
+                    $atributo->attr_id = $iotGroup->id;
 
                     $atributo->save();
                 }

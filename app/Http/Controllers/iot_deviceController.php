@@ -76,11 +76,7 @@ class iot_deviceController extends AppBaseController
             $url = "http://$ip:$iotPort/iot/devices";
             $deviceId = $input['device_id'];
             //$entityName = $input['entity_name'];
-            $entityType = $input['entity_type'];
-            $atributoObject = $input['attrObject'];
-            $atributoNombre = $input['attrName'];
-            $atributoTipo = $input['attrType'];
-            $tamanoAtributo = count($atributoNombre);
+            $entityType = ucfirst($input['entity_type']);
 
             /*creacion de identidad*/
 
@@ -90,12 +86,16 @@ class iot_deviceController extends AppBaseController
             $data['devices'][0]['entity_type'] = ucfirst($entityType);
             $data['devices'][0]['timezone'] = config('fiware.fiware_timezone');
 
-            for ($i=0;$i < $tamanoAtributo; $i++){
-
-                $data['devices'][0]['attributes'][$i]['object_id'] = $atributoObject[$i];
-                $data['devices'][0]['attributes'][$i]['name'] = $atributoNombre[$i];
-                $data['devices'][0]['attributes'][$i]['type'] = $atributoTipo[$i];
-            };
+            $idA = iotService::where('entity_type','=',$entityType)->get('id')->toArray();
+            $attr = iot_device_attribute::where('attr_id','=',$idA[0]['id'])->get()->toArray();
+           
+            $i=0;
+            foreach($attr as $clave => $valor){
+                $data['devices'][0]['attributes'][$i]['object_id'] =$valor['objective'];
+                $data['devices'][0]['attributes'][$i]['name'] =$valor['name'];
+                $data['devices'][0]['attributes'][$i]['type'] = $valor['type'];  
+                $i++;
+            }
 
             $data['devices'][0]['static_attributes'][0]['name'] = "user_id";
             $data['devices'][0]['static_attributes'][0]['type'] = "Relationship";
@@ -114,7 +114,7 @@ class iot_deviceController extends AppBaseController
             $data['devices'][0]['static_attributes'][4]['value'] = config('fiware.fiware_dock');
 
             $data_json = json_encode($data);
-
+            
             /************fin */
             $headers = [
                 "Content-Type:application/json",

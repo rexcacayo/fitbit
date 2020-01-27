@@ -1,0 +1,23 @@
+/** Estilos perzonalizados**/
+.atributes{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+    align-content: stretch;
+    margin-top: 18px;
+    margin-bottom: 5px;
+}
+
+.tamaño1{
+    width:37px !important;
+}
+
+.tamaño2{
+    width:87px !important;
+}
+
+.tamaño3{
+    width:67px !important;
+}

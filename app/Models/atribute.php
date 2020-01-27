@@ -54,10 +54,7 @@ class atribute extends Model
 
     ];
 
-    public function iotservice()
-    {
-        return $this->belongsTo('App\iotService', 'entity_id', 'id');
-    }
+
 
 
 }

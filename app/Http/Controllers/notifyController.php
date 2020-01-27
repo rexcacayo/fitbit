@@ -67,15 +67,23 @@ class notifyController extends AppBaseController
         $service = config('fiware.fiware_service');
         $path = $input['fiwarePath'];
         $mensaje = $input['description'];
-        $type = $input['type'];
+        $type =  ucfirst($input['type']);
         $portOrion = config('fiware.fiware_orion_port');
         $ipCygnus = config('fiware.fiware_cygnus_ip');
         $portCygnus = config('fiware.fiware_cygnus_port');
         $url = "http://$ip:$portOrion/v2/subscriptions";
-        $urlCygnus = "http://$ipCygnus:$portCygnus/notify";
-
+        //$urlCygnus = "http://$ipCygnus:$portCygnus/notify";
+        $api = config('fiware.fiware_api');
+        
+        if($ipCygnus !== ""){
+            $urlCygnus = "http://$ipCygnus:$portCygnus/notify";   
+        }else{
+            $urlCygnus = "http://$api/api/sign";      
+        }
+        
+       
         try{
-            $data = '{"description": "'.$mensaje.'", "subject": { "entities": [{"idPattern": ".*", "type": "'.$type.'"}]},"notification": {"http": {"url": "'.$urlCygnus.'"},"attrsFormat": "legacy"},"throttling": 5}';
+            $data = '{"description": "'.$mensaje.'", "subject": { "entities": [{"idPattern": ".*", "type": "'.$type.'"}]},"notification": {"http": {"url": "'.$urlCygnus.'"},"attrsFormat": "legacy"},"throttling": 1}';
             $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_POST, 1);

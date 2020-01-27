@@ -17,10 +17,11 @@ class CreateIotDeviceAttributesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('type');
-            $table->integer('deviceAttr_id')->unsigned();
+            $table->string('objective');
+            $table->integer('attr_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('deviceAttr_id')->references('id')->on('iot_devices')->onDelete('cascade');
+            $table->foreign('attr_id')->references('id')->on('iot_services')->onDelete('cascade');
         });
     }
 

@@ -24,4 +24,5 @@
     'fiware_country'    =>  env('FIWARE_COUNTRY'),
     'fiware_city'    =>  env('FIWARE_CITY'),
     'fiware_dock'    =>  env('FIWARE_DOCK'),
+    'fiware_api'     =>  env('FIWARE_API'),
     ];

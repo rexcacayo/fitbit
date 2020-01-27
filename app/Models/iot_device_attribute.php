@@ -19,7 +19,7 @@ class iot_device_attribute extends Model
     use SoftDeletes;
 
     public $table = 'iot_device_attributes';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -27,7 +27,8 @@ class iot_device_attribute extends Model
     public $fillable = [
         'name',
         'type',
-        'deviceAttr_id'
+        'objective',
+        'attr_id'
     ];
 
     /**
@@ -39,7 +40,8 @@ class iot_device_attribute extends Model
         'id' => 'integer',
         'name' => 'string',
         'type' => 'string',
-        'deviceAttr_id' => 'integer'
+        'objective' => 'string',
+        'attr_id' => 'integer'
     ];
 
     /**
@@ -47,12 +49,9 @@ class iot_device_attribute extends Model
      *
      * @var array
      */
-    public static $rules = [
-        'name' => 'required',
-        'type' => 'required'
-    ];
+    public static $rules = [];
 
-    public function iotAttr()
+    public function iotservice()
 
     {
 
@@ -61,5 +60,6 @@ class iot_device_attribute extends Model
     }
 
 
-    
+
+
 }
