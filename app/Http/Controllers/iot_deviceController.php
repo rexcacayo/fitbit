@@ -83,18 +83,19 @@ class iot_deviceController extends AppBaseController
 
             $data['devices'][0]['device_id'] = strtolower($entityType).$deviceId;
             //$data['devices'][0]['entity_name'] = 'urn:ngsi-Id:'.ucfirst($entityType).':'.$deviceId;
-            $data['devices'][0]['entity_name'] = 'urn:ngsi-Id:'.ucfirst($entityType);
+            //$data['devices'][0]['entity_name'] = 'urn:ngsi-Id:'.ucfirst($entityType);
+            $data['devices'][0]['entity_name'] = $deviceId;
             $data['devices'][0]['entity_type'] = ucfirst($entityType);
             $data['devices'][0]['timezone'] = config('fiware.fiware_timezone');
 
             $idA = iotService::where('entity_type','=',$entityType)->get('id')->toArray();
             $attr = iot_device_attribute::where('attr_id','=',$idA[0]['id'])->get()->toArray();
-           
+
             $i=0;
             foreach($attr as $clave => $valor){
                 $data['devices'][0]['attributes'][$i]['object_id'] =$valor['objective'];
                 $data['devices'][0]['attributes'][$i]['name'] =$valor['name'];
-                $data['devices'][0]['attributes'][$i]['type'] = $valor['type']; 
+                $data['devices'][0]['attributes'][$i]['type'] = $valor['type'];
                 $field = $valor['name'];
                 $i++;
             }
@@ -117,14 +118,14 @@ class iot_deviceController extends AppBaseController
 
             $data_json = json_encode($data);
             /***********AGREGAR CAMPOS DE ATIBUTOS  ATABLA********/
-            $arrayAttrEst = $data['devices'][0]['static_attributes'];
-            foreach($arrayAttrEst as $campo => $valor){
+             /*$arrayAttrEst = $data['devices'][0]['static_attributes'];
+           foreach($arrayAttrEst as $campo => $valor){
                 $field = $valor['name'];
                 $cadenaSql = "ALTER TABLE $entityType ADD $field varchar(191) NULL";
-                DB::statement($cadenaSql); 
-            }
-            
-            
+                DB::statement($cadenaSql);
+            }*/
+
+
 
 
 

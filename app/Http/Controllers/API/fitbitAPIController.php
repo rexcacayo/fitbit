@@ -438,9 +438,22 @@ class fitbitAPIController extends AppBaseController
     public function signOcb(Request $request){
 	    $data=$request->toArray();
         //$ans['headers']= $request->header();
-        \Log::info($data['contextResponses'][0]['contextElement']);
-        return $this->sendResponse(200,$data);
+		$id = $data['contextResponses'][0]['contextElement']['id'];
+		$path = "/";
+		$type = $data['contextResponses'][0]['contextElement']['type'];
+		$datos = $data['contextResponses'][0]['contextElement']['attributes'];
+		$recvTs = round(microtime($data['contextResponses'][0]['contextElement']['attributes'][0]['value']),0);
+		$recv = $data['contextResponses'][0]['contextElement']['attributes'][0]['value'];
+		foreach($datos as $campo => $valor){
+			$attrname = $valor['name'];
+			$attrtype = $valor['type'];
+			$attrvalue = $valor['value'];
+			$cadenaSql = "INSERT INTO $type (recvtimets, recvTime, fiwareServicePath, entityId, entityType, attrName, attrType, attrValue ) VALUES ('$recvTs','$recv','$path','$id','$type', '$attrname', '$attrtype', '$attrvalue')";
+            DB::statement($cadenaSql);
+		}
+		\Log::info($attrmd);
+        return $this->sendResponse(200,'ok');
 	}
-	
+
 
 }

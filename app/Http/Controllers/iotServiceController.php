@@ -80,13 +80,11 @@ class iotServiceController extends AppBaseController
         $camposTamano = count($campos);
 
         $cadena = "CREATE TABLE $entity(";
-        $cadena.="id SERIAL PRIMARY KEY";
-        foreach ($campos as $value){
-            $cadena .= ','.$value.' varchar(191) NULL';
-        };
-        $cadena .=",tipoDato varchar(191) NULL";
-        $cadena .=",created_at TIMESTAMP NOT NULL DEFAULT NOW(),deleted_at TIMESTAMP DEFAULT NULL";
+        $cadena.="recvTimeTs varchar(191) null, recvTime varchar(191) null, fiwareServicePath varchar(191) null,";
+        $cadena.="entityId varchar(191) null, entityType varchar(191) null, attrName varchar(191) null,";
+        $cadena.="attrType varchar(191) null, attrValue varchar(191) null, attrMd varchar(191) null";
         $cadena .= ")";
+
         try{
             $results=DB::statement($cadena);
         }
