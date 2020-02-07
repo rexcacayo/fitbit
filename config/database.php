@@ -74,7 +74,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'schema' => 'public',
+            'schema' => 'postgis',
             'sslmode' => 'prefer',
         ],
 
@@ -100,7 +100,7 @@ return [
                 'password' => env('MONGO_DB_PASSWORD'),
                 'options'  => []
             ],
-       
+
 
     ],
 
